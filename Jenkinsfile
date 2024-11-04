@@ -6,9 +6,8 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    sh 'docker build -t reddy_name .'
+                    bat 'docker build -t your_docker_image_name .'
                 }
-                
             }
         }
     }
