@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'dockerhub' // Replace with your Jenkins credentials ID
-        DOCKER_IMAGE_NAME = 'premdatagrokr/prem' // Format: <username>/<image_name>
+        DOCKER_CREDENTIALS_ID = 'your-dockerhub-credentials-id' // Replace with your Jenkins credentials ID
+        DOCKER_IMAGE_NAME = 'your_dockerhub_username/prem' // Format: <username>/<image_name>
+        CONTAINER_NAME = 'muni' // Define container name for reuse
     }
 
     stages {
@@ -19,14 +20,14 @@ pipeline {
             steps {
                 script {
                     // Run the Docker image
-                    bat "docker run --name muni -d ${DOCKER_IMAGE_NAME}" // Use double quotes
+                    bat "docker run --name ${CONTAINER_NAME} -d ${DOCKER_IMAGE_NAME}" // Use double quotes
                     
                     // Give it a moment to start
                     sleep(5)
 
                     // Fetch and print the logs
                     echo 'Container logs:'
-                    bat "docker logs muni" // Use double quotes
+                    bat "docker logs ${CONTAINER_NAME}" // Use double quotes
                 }
             }
         }
@@ -41,6 +42,22 @@ pipeline {
                 }
             }
         }
+        stage('Clean Up') {
+            steps {
+                script {
+                    try {
+                        // Stop and remove the container
+                        bat "docker stop ${CONTAINER_NAME} || exit 0"
+                        bat "docker rm ${CONTAINER_NAME} || exit 0"
+                        
+                        // Optionally remove the Docker image after the pipeline completes
+                        bat "docker rmi ${DOCKER_IMAGE_NAME} || exit 0"
+                    } catch (Exception e) {
+                        error "Failed to clean up Docker resources: ${e.message}"
+                    }
+                }
+            }
+        }
     }
 
     post {
@@ -49,14 +66,6 @@ pipeline {
         }
         failure {
             echo 'There was an error in the process.'
-        }
-        always {
-            script {
-                // Cleanup: stop and remove the container
-                bat "docker stop muni || exit 0" // Use exit 0 for Windows
-                bat "docker rm muni || exit 0" // Use exit 0 for Windows
-                bat "docker rmi ${DOCKER_IMAGE_NAME}"
-            }
         }
     }
 }
