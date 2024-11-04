@@ -55,6 +55,7 @@ pipeline {
                 // Cleanup: stop and remove the container
                 bat "docker stop muni || exit 0" // Use exit 0 for Windows
                 bat "docker rm muni || exit 0" // Use exit 0 for Windows
+                bat "docker rmi ${DOCKER_IMAGE_NAME}"
             }
         }
     }
