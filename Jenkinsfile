@@ -2,29 +2,19 @@ pipeline {
     agent any 
 
     stages {
-        stage('Build Docker Image') {
+        stage('Check Git Version') {
             steps {
                 script {
-                    // Build the Docker image
-                    sh 'docker build -t hello-world-image .'
+                    // Print the Git version
+                    def gitVersion = sh(script: 'git --version', returnStdout: true).trim()
+                    echo "Git Version: ${gitVersion}"
                 }
             }
         }
-        stage('Run Docker Container') {
+        stage('Checkout Code') {
             steps {
-                script {
-                    // Run the Docker container
-                    sh 'docker run --rm hello-world-image'
-                }
+                git url: 'https://github.com/your-repo.git', branch: 'main'
             }
-        }
-    }
-    post {
-        success {
-            echo 'Docker image built and container run successfully!'
-        }
-        failure {
-            echo 'Pipeline failed.'
         }
     }
 }
