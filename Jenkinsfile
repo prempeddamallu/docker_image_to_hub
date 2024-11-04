@@ -19,14 +19,14 @@ pipeline {
             steps {
                 script {
                     // Run the Docker image
-                    bat "docker run --name your_container_name -d ${DOCKER_IMAGE_NAME}" // Use double quotes
+                    bat "docker run --name muni -d ${DOCKER_IMAGE_NAME}" // Use double quotes
                     
                     // Give it a moment to start
                     sleep(5)
 
                     // Fetch and print the logs
                     echo 'Container logs:'
-                    bat "docker logs your_container_name" // Use double quotes
+                    bat "docker logs muni" // Use double quotes
                 }
             }
         }
@@ -53,8 +53,8 @@ pipeline {
         always {
             script {
                 // Cleanup: stop and remove the container
-                bat "docker stop your_container_name || exit 0" // Use exit 0 for Windows
-                bat "docker rm your_container_name || exit 0" // Use exit 0 for Windows
+                bat "docker stop muni || exit 0" // Use exit 0 for Windows
+                bat "docker rm muni || exit 0" // Use exit 0 for Windows
             }
         }
     }
