@@ -1,16 +1,24 @@
 pipeline {
-    agent any 
+    agent any
 
     stages {
-        stage('Check Git Version') {
+        stage('Build Docker Image') {
             steps {
-                echo "Hello from check our"
+                script {
+                    // Build the Docker image
+                    sh 'docker build -t reddy_name .'
+                }
+                
             }
         }
-        stage('Checkout Code') {
-            steps {
-                echo "hello from code"
-            }
+    }
+
+    post {
+        success {
+            echo 'Docker image built successfully!'
+        }
+        failure {
+            echo 'There was an error building the Docker image.'
         }
     }
 }
