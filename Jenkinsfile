@@ -6,7 +6,15 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    bat 'docker build -t your_docker_image_name .'
+                    bat 'docker build -t reddy_name .'
+                }
+            }
+        }
+        stage('Run Docker Image') {
+            steps {
+                script {
+                    // Run the Docker image
+                    bat 'docker run --name redy_con -d reddy_name'
                 }
             }
         }
@@ -14,10 +22,10 @@ pipeline {
 
     post {
         success {
-            echo 'Docker image built successfully!'
+            echo 'Docker image built and running successfully!'
         }
         failure {
-            echo 'There was an error building the Docker image.'
+            echo 'There was an error building or running the Docker image.'
         }
     }
 }
