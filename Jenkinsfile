@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'your-dockerhub-credentials-id' // Replace with your Jenkins credentials ID
+        DOCKER_CREDENTIALS_ID = 'dockerhub' // Replace with your Jenkins credentials ID
         DOCKER_IMAGE_NAME = 'your_dockerhub_username/prem' // Format: <username>/<image_name>
         CONTAINER_NAME = 'muni' // Define container name for reuse
     }
